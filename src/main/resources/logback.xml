@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{mm:ss.SSS} %-4p - [%X{uow}-%X{requestId}][U:%X{USERNAME}] %logger{16}:%L - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="ccom.pruebasJasmine" level="TRACE" />
+	<logger name="org.springframework" level="INFO" />
+	<logger name="com.gargoylesoftware.htmlunit" level="OFF" />
+	<logger name="org.apache.commons.httpclient" level="OFF" />
+	<root level="INFO">
+		<appender-ref ref="console" />
+	</root>
+
+</configuration>
