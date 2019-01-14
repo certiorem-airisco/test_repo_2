@@ -40,14 +40,14 @@
 
     <!-- properties for translating saga output to sonar lcov file -->
     <saga.output.lcov.source.dir.path>SF:src/</saga.output.lcov.source.dir.path>
-    <sonar.lcov.source.dir.path>SF:src/main/javascript/</sonar.lcov.source.dir.path>
+    <sonar.lcov.source.dir.path>SF:src/main/webapp/javascript/</sonar.lcov.source.dir.path>
 
     <!-- properties for sonar -->
     <sonar.language>js</sonar.language>   	<!-- NOT javascript/JavaScript ! -->
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
     <sonar.javascript.lcov.reportPath>${saga.output.coverage.sonar.lcov.file}</sonar.javascript.lcov.reportPath>
     <!-- used in build/properties -->
-    <sonar.sources>${basedir}/src/main/javascript</sonar.sources>
+    <sonar.sources>${basedir}/src/main/webapp/javascript</sonar.sources>
   </properties>
 
   <dependencies>
