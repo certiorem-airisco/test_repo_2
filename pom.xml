@@ -294,25 +294,35 @@
             </execution>
           </executions>
         </plugin>
-        <!--&lt;!&ndash; sonar plugin &ndash;&gt;-->
-        <!--<plugin>-->
-          <!--<groupId>org.codehaus.mojo</groupId>-->
-          <!--<artifactId>sonar-maven-plugin</artifactId>-->
-          <!--<version>5.1</version>-->
+        <!-- sonar plugin -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.6.0.1398</version>
 
-          <!--&lt;!&ndash; use verify execution so it runs immediately after saga &ndash;&gt;-->
-          <!--<executions>-->
-            <!--<execution>-->
-              <!--<id>sonar-run</id>-->
-              <!--<phase>verify</phase>-->
-              <!--<goals>-->
-                <!--<goal>sonar</goal>-->
-              <!--</goals>-->
-            <!--</execution>-->
-          <!--</executions>-->
-        <!--</plugin>-->
+          <!-- use verify execution so it runs immediately after saga -->
+          <executions>
+            <execution>
+              <id>sonar-run</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sonar</goal>
+              </goals>
+              <configuration>
+                <name>sonar.sources</name>
+                <value>${sonar.sources}</value>
+                <regex>[/\\]+java$</regex>
+                <replacement></replacement>
+                <failIfNoMatch>false</failIfNoMatch>
+              </configuration>
+            </execution>
+          </executions>
+
+        </plugin>
+        <!-- needed by sonar plugin to find files to analyse -->
 
       </plugins>
+
     </pluginManagement>
   </build>
 </project>
