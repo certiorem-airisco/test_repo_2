@@ -294,23 +294,23 @@
             </execution>
           </executions>
         </plugin>
-        <!-- sonar plugin -->
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>2.2</version>
+        <!--&lt;!&ndash; sonar plugin &ndash;&gt;-->
+        <!--<plugin>-->
+          <!--<groupId>org.codehaus.mojo</groupId>-->
+          <!--<artifactId>sonar-maven-plugin</artifactId>-->
+          <!--<version>5.1</version>-->
 
-          <!-- use verify execution so it runs immediately after saga -->
-          <executions>
-            <execution>
-              <id>sonar-run</id>
-              <phase>verify</phase>
-              <goals>
-                <goal>sonar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
+          <!--&lt;!&ndash; use verify execution so it runs immediately after saga &ndash;&gt;-->
+          <!--<executions>-->
+            <!--<execution>-->
+              <!--<id>sonar-run</id>-->
+              <!--<phase>verify</phase>-->
+              <!--<goals>-->
+                <!--<goal>sonar</goal>-->
+              <!--</goals>-->
+            <!--</execution>-->
+          <!--</executions>-->
+        <!--</plugin>-->
 
       </plugins>
     </pluginManagement>
