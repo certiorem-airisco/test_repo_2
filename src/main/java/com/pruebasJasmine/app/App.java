@@ -60,7 +60,7 @@ public class App {
         resources.setDirectoriesListed(false);
         resources.setBaseResource(Resource.newClassPathResource(RESOURCES_BASE));
         MimeTypes mimeTypes = new MimeTypes();
-        mimeTypes.addMimeMapping("js", "application/javascript; charset=UTF-8");
+        mimeTypes.addMimeMapping("javascript", "application/javascript; charset=UTF-8");
         resources.setMimeTypes(mimeTypes);
         return contextHandler;
     }

@@ -7,7 +7,7 @@
   <groupId>com.testjasmine</groupId>
   <artifactId>pruebasJasmine</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
 
   <name>pruebasJasmine Maven Webapp</name>
   <!-- FIXME change it to the project's website -->
@@ -23,7 +23,7 @@
     <maven.compiler.target>1.7</maven.compiler.target>
     <mockito>1.9.0</mockito>
     <slf4j>1.7.21</slf4j>
-
+    <jacoco-maven-plugin.version>0.8.1</jacoco-maven-plugin.version>
     <spring-data-jpa>2.0.9.RELEASE</spring-data-jpa>
     <hibernate.version>5.3.4.Final</hibernate.version>
     <spring-hateoas>0.23.0.RELEASE</spring-hateoas>
@@ -31,7 +31,6 @@
     <spring>5.0.8.RELEASE</spring>
     <spring-support>2.0.6</spring-support>
     <spring-plugin-core>1.2.0.RELEASE</spring-plugin-core>
-
   </properties>
 
 
@@ -104,12 +103,6 @@
       <version>${mockito}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>compile</scope>
-    </dependency>
 
   </dependencies>
 
@@ -117,6 +110,7 @@
     <finalName>pruebasJasmine</finalName>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
@@ -133,6 +127,28 @@
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
+        </plugin>
+        <!-- JASMINE -->
+
+        <plugin>
+          <groupId>com.github.searls</groupId>
+          <artifactId>jasmine-maven-plugin</artifactId>
+          <version>2.2</version>
+
+          <executions>
+            <execution>
+              <goals>
+                <goal>test</goal>
+              </goals>
+
+            </execution>
+          </executions>
+          <configuration>
+
+            <!--<jsSrcDir>src/main/webapp/resources/js/app</jsSrcDir>-->
+            <!--<jsTestSrcDir>src/test/javascript/jasmine/spec/app</jsTestSrcDir>-->
+
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
