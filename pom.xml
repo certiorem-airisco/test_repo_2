@@ -145,7 +145,7 @@
           </executions>
           <configuration>
 
-            <jsSrcDir>src/main/webapp/resources/javascript</jsSrcDir>
+            <jsSrcDir>src/main/webapp/javascript</jsSrcDir>
 
             <jsTestSrcDir>src/main/test/javascript</jsTestSrcDir>
 
