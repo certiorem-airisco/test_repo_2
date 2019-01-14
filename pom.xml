@@ -8,7 +8,7 @@
   <groupId>com.pruebasJasmine</groupId>
   <artifactId>pruebasJasmine</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>pruebasJasmine Maven Webapp</name>
+  <name>pruebasJasmine Maven Webapp2</name>
   <description>Descarga de Conciliaciones</description>
   <packaging>jar</packaging>
 
@@ -33,8 +33,22 @@
     <spring>5.0.8.RELEASE</spring>
     <spring-support>2.0.6</spring-support>
     <spring-plugin-core>1.2.0.RELEASE</spring-plugin-core>
-  </properties>
+    <!-- properties for saga -->
+    <saga.output.dir>${project.build.directory}/coverage</saga.output.dir>
+    <saga.output.coverage.file>${saga.output.dir}/total-coverage.dat</saga.output.coverage.file>
+    <saga.output.coverage.sonar.lcov.file>${saga.output.dir}/total-coverage-sonar.dat</saga.output.coverage.sonar.lcov.file>
 
+    <!-- properties for translating saga output to sonar lcov file -->
+    <saga.output.lcov.source.dir.path>SF:src/</saga.output.lcov.source.dir.path>
+    <sonar.lcov.source.dir.path>SF:src/main/javascript/</sonar.lcov.source.dir.path>
+
+    <!-- properties for sonar -->
+    <sonar.language>js</sonar.language>   	<!-- NOT javascript/JavaScript ! -->
+    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+    <sonar.javascript.lcov.reportPath>${saga.output.coverage.sonar.lcov.file}</sonar.javascript.lcov.reportPath>
+    <!-- used in build/properties -->
+    <sonar.sources>${basedir}/src/main/javascript</sonar.sources>
+  </properties>
 
   <dependencies>
     <!-- COMMONS -->
@@ -130,29 +144,7 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.22.1</version>
         </plugin>
-        <!-- JASMINE -->
 
-        <plugin>
-          <groupId>com.github.searls</groupId>
-          <artifactId>jasmine-maven-plugin</artifactId>
-          <version>2.2</version>
-
-          <executions>
-            <execution>
-              <goals>
-                <goal>test</goal>
-              </goals>
-
-            </execution>
-          </executions>
-          <configuration>
-
-            <jsSrcDir>src/main/webapp/javascript</jsSrcDir>
-
-            <jsTestSrcDir>src/main/test/javascript</jsTestSrcDir>
-
-          </configuration>
-        </plugin>
         <plugin>
           <artifactId>maven-war-plugin</artifactId>
           <version>3.2.2</version>
@@ -232,6 +224,93 @@
           </executions>
         </plugin>
 
+        <!-- JASMINE -->
+
+        <plugin>
+          <groupId>com.github.searls</groupId>
+          <artifactId>jasmine-maven-plugin</artifactId>
+          <version>2.2</version>
+
+          <executions>
+            <execution>
+              <goals>
+                <goal>test</goal>
+              </goals>
+
+            </execution>
+          </executions>
+          <configuration>
+            <!-- keepServerAlive needed to run saga coverage -->
+            <keepServerAlive>true</keepServerAlive>
+
+            <jsSrcDir>src/main/webapp/javascript</jsSrcDir>
+
+            <jsTestSrcDir>src/main/test/javascript</jsTestSrcDir>
+
+          </configuration>
+        </plugin>
+        <!-- coverage plugin -->
+        <plugin>
+          <groupId>com.github.timurstrekalov</groupId>
+          <artifactId>saga-maven-plugin</artifactId>
+          <version>1.5.0</version>
+          <executions>
+            <execution>
+              <phase>verify</phase>
+              <goals>
+                <goal>coverage</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <!-- URL for jasmine server -->
+            <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
+            <outputDir>${saga.output.dir}</outputDir>
+          </configuration>
+        </plugin>
+
+        <!-- ant run to translate saga output to sonar lcov file. This must appear after saga plugin  -->
+        <plugin>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.7</version>
+          <executions>
+            <execution>
+              <id>saga-to-sonar-lcov</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>run</goal>
+              </goals>
+              <configuration>
+                <target>
+                  <echo message="setting up sonar lcov file (from saga): ${saga.output.coverage.sonar.lcov.file} ..." />
+                  <copy file="${saga.output.coverage.file}" tofile="${saga.output.coverage.sonar.lcov.file}" />
+
+                  <echo message="replacing '${saga.output.lcov.source.dir.path} with '${sonar.lcov.source.dir.path}' in ${saga.output.coverage.sonar.lcov.file}" />
+                  <replace file="${saga.output.coverage.sonar.lcov.file}"
+                    token="${saga.output.lcov.source.dir.path}"
+                    value="${sonar.lcov.source.dir.path}" />
+                </target>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- sonar plugin -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>2.2</version>
+
+          <!-- use verify execution so it runs immediately after saga -->
+          <executions>
+            <execution>
+              <id>sonar-run</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>sonar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
 
       </plugins>
     </pluginManagement>
