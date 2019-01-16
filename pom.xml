@@ -8,7 +8,7 @@
   <groupId>com.pruebasJasmine</groupId>
   <artifactId>pruebasJasmine</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-  <name>pruebasJasmine Maven Webapp2</name>
+  <name>pruebasJasmine Maven Webapp3</name>
   <description>Descarga de Conciliaciones</description>
   <packaging>jar</packaging>
 
@@ -36,18 +36,22 @@
     <!-- properties for saga -->
     <saga.output.dir>${project.build.directory}/coverage</saga.output.dir>
     <saga.output.coverage.file>${saga.output.dir}/total-coverage.dat</saga.output.coverage.file>
-    <saga.output.coverage.sonar.lcov.file>${saga.output.dir}/total-coverage-sonar.dat</saga.output.coverage.sonar.lcov.file>
+    <saga.output.coverage.sonar.lcov.file>${saga.output.dir}/total-coverage.dat</saga.output.coverage.sonar.lcov.file>
 
     <!-- properties for translating saga output to sonar lcov file -->
     <saga.output.lcov.source.dir.path>SF:src/</saga.output.lcov.source.dir.path>
     <sonar.lcov.source.dir.path>SF:src/main/webapp/javascript/</sonar.lcov.source.dir.path>
 
     <!-- properties for sonar -->
-    <sonar.language>js</sonar.language>   	<!-- NOT javascript/JavaScript ! -->
+    <!--<sonar.language>js</sonar.language>   	&lt;!&ndash; NOT js1/JavaScript ! &ndash;&gt;-->
     <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-    <sonar.javascript.lcov.reportPath>${saga.output.coverage.sonar.lcov.file}</sonar.javascript.lcov.reportPath>
+
+    <!--<sonar.javascript.environments>jasmine</sonar.javascript.environments>-->
     <!-- used in build/properties -->
-    <sonar.sources>${basedir}/src/main/webapp/javascript</sonar.sources>
+    <sonar.javascript.lcov.reportPaths>${saga.output.coverage.sonar.lcov.file}</sonar.javascript.lcov.reportPaths>
+
+
+    <sonar.sources>${basedir}/src/main/</sonar.sources>
   </properties>
 
   <dependencies>
@@ -124,7 +128,7 @@
 
   <build>
     <finalName>pruebasJasmine</finalName>
-    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+
       <plugins>
 
         <plugin>
@@ -233,27 +237,74 @@
 
           <executions>
             <execution>
+              <id>jasmine-bdd</id>
+
+              <goals>
+
+                <goal>bdd</goal>
+              </goals>
+              <!--<configuration>-->
+
+                <!--<jsTestSrcDir>${basedir}/src/main/test/js1</jsTestSrcDir>-->
+                <!--<jsSrcDir>${basedir}/src/main/webapp/js1</jsSrcDir>-->
+                <!--<sourceIncludes>-->
+                  <!--<include>${basedir}/src/main/webapp/js1/**/*.js</include>-->
+                <!--</sourceIncludes>-->
+                <!--<specIncludes>-->
+                  <!--<include>${basedir}/src/main/test/**/*.js</include>-->
+                <!--</specIncludes>-->
+              <!--</configuration>-->
+            </execution>
+
+            <!-- for running 'mvn test' -->
+            <!-- test run results are shown on the console output -->
+            <execution>
+              <id>jasmine-test</id>
               <goals>
                 <goal>test</goal>
               </goals>
+              <configuration>
+                <!-- keepServerAlive needed to run saga coverage -->
+                <keepServerAlive>true</keepServerAlive>
+                <jsSrcDir>src/main/webapp/javascript</jsSrcDir>
+                <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
 
+                <!--<sourceIncludes>-->
+                  <!--<include>src/main/webapp/**/*.js</include>-->
+                <!--</sourceIncludes>-->
+                <!--<specIncludes>-->
+                  <!--<include>src/main/test/**/*.js</include>-->
+                <!--</specIncludes>-->
+                <webDriverClassName>org.openqa.selenium.chrome.ChromeDriver</webDriverClassName>
+                <webDriverCapabilities>
+                  <capability>
+                    <name>browserName</name>
+                    <value>chrome</value>
+                  </capability>
+                  <capability>
+                    <name>chromeOptions</name>
+                    <value implementation="org.openqa.selenium.chrome.ChromeOptions" >
+                      <args>
+                        <value>--headless</value>
+                        <value>--disable-gpu</value>
+                        <value>--remote-debugging-port=9222</value>
+                        <value>--enable-logging</value>
+                        <value>--v=1</value>
+                      </args>
+                    </value>
+                  </capability>
+                </webDriverCapabilities>
+                <haltOnFailure>true</haltOnFailure>
+              </configuration>
             </execution>
           </executions>
-          <configuration>
-            <!-- keepServerAlive needed to run saga coverage -->
-            <keepServerAlive>true</keepServerAlive>
 
-            <jsSrcDir>src/main/webapp/javascript</jsSrcDir>
-
-            <jsTestSrcDir>src/main/test/javascript</jsTestSrcDir>
-
-          </configuration>
         </plugin>
         <!-- coverage plugin -->
         <plugin>
           <groupId>com.github.timurstrekalov</groupId>
           <artifactId>saga-maven-plugin</artifactId>
-          <version>1.5.0</version>
+          <version>1.5.5</version>
           <executions>
             <execution>
               <phase>verify</phase>
@@ -266,8 +317,11 @@
             <!-- URL for jasmine server -->
             <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
             <outputDir>${saga.output.dir}</outputDir>
+
           </configuration>
         </plugin>
+
+
 
         <!-- ant run to translate saga output to sonar lcov file. This must appear after saga plugin  -->
         <plugin>
@@ -308,13 +362,6 @@
               <goals>
                 <goal>sonar</goal>
               </goals>
-              <configuration>
-                <name>sonar.sources</name>
-                <value>${sonar.sources}</value>
-                <regex>[/\\]+java$</regex>
-                <replacement></replacement>
-                <failIfNoMatch>false</failIfNoMatch>
-              </configuration>
             </execution>
           </executions>
 
@@ -323,6 +370,9 @@
 
       </plugins>
 
-    </pluginManagement>
+
+
+    <sourceDirectory>${sonar.sources}</sourceDirectory>
   </build>
+
 </project>

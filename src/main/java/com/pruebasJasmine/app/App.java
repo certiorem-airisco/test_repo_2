@@ -46,7 +46,7 @@ public class App {
         handlers.setHandlers(new Handler[] { getServletContextHandler(context, env), getResourceHandler(env) });
         GzipHandler gzipHandler = new GzipHandler();
         gzipHandler.setHandler(handlers);
-        gzipHandler.setIncludedMimeTypes("application/javascript", "image/jpeg","text/css","text/html");
+        gzipHandler.setIncludedMimeTypes("application/js1", "image/jpeg","text/css","text/html");
         server.setHandler(gzipHandler);
         server.start();
         server.join();
@@ -60,7 +60,7 @@ public class App {
         resources.setDirectoriesListed(false);
         resources.setBaseResource(Resource.newClassPathResource(RESOURCES_BASE));
         MimeTypes mimeTypes = new MimeTypes();
-        mimeTypes.addMimeMapping("javascript", "application/javascript; charset=UTF-8");
+        mimeTypes.addMimeMapping("js1", "application/js1; charset=UTF-8");
         resources.setMimeTypes(mimeTypes);
         return contextHandler;
     }
